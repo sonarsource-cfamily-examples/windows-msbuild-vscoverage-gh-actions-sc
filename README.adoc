@@ -1,3 +1,32 @@
+= C++ example project scanned on SonarCloud using GitHub Actions
+// URIs:
+:uri-qg-status: https://sonarcloud.io/dashboard?id=sc-sq-c-family-examples_windows-msbuild-gh-actions-sc
+:img-qg-status: https://sonarcloud.io/api/project_badges/measure?project=sc-sq-c-family-examples_windows-msbuild-gh-actions-sc&metric=alert_status
+:uri-build-status: https://github.com/sc-sq-c-family-examples/windows-msbuild-gh-actions-sc/actions/workflows/build.yml
+:img-build-status: https://github.com/sc-sq-c-family-examples/windows-msbuild-gh-actions-sc/actions/workflows/build.yml/badge.svg
+
+image:{img-build-status}[Build Status, link={uri-build-status}]
+image:{img-qg-status}[Quality Gate Status,link={uri-qg-status}]
+
+*This project is analysed on https://sonarcloud.io/dashboard?id=sc-sq-c-family-examples_windows-msbuild-gh-actions-sc[SonarCloud]!*
+
+It is very easy to analyze a C/C++/Objective-C project with SonarCloud:
+
+. Create a `sonar-project.properties` file to store your configuration
+. In your `.github/workflows/build.yml` file:
+.. Download the https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/[Sonar Scanner]
+.. Download the https://docs.sonarqube.org/latest/analysis/languages/cfamily/#header-4[Build Wrapper]
+.. Wrap your compilation with the Build Wrapper
+.. Run `sonar-scanner` as the final step
+. Make sure that you have your token stored as a secret in your repository (`SONAR_TOKEN`). You can request new tokens using https://sonarcloud.io/account/security/[Account/Security page].
+
+You can take a look at the link:sonar-project.properties[sonar-project.properties] and link:.github/workflows/build.yml[build.yml] to see it in practice.
+
+= Documentation
+
+- https://docs.sonarqube.org/latest/analysis/languages/cfamily/[Documentation of the C/C++/Objective-C plugin and its Build Wrapper]
+-  https://sonarcloud.io/documentation/getting-started/github/[Documentation of using SonarCloud with GitHub]
+
 = Windows\MSBuild
 
 A build of the https://github.com/sc-sq-c-family-examples/code[code repository] on Windows platform using MSBuild build system.
