@@ -14,6 +14,7 @@ jobs:
                                         # https://sonarcloud.io/documentation/analysis/scan/sonarscanner/
       SONAR_SERVER_URL: "https://sonarcloud.io"
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+      COVERAGE_RESULTS: coverage_results # Directory where coverage results will be placed
     steps:
       - uses: actions/checkout@v2
         with:
@@ -24,6 +25,8 @@ jobs:
           java-version: 11
       - name: Set up msbuild
         uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
+        uses: darenm/Setup-VSTest@v1
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -48,10 +51,22 @@ jobs:
       - name: Run build-wrapper
         run: |
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} msbuild sonar_scanner_example.vcxproj /t:rebuild /nodeReuse:false
+      - name: Build tests
+        run: |
+          msbuild test1\test1.vcxproj
+          msbuild test2\test2.vcxproj
+      - name: Run tests with coverage
+        run: >
+          vstest.console.exe test1\*\test1.dll test2\*\test2.dll 
+          /EnableCodeCoverage 
+          /Collect:"Code Coverage;Format=Xml" 
+          /ResultsDirectory:"${{ env.COVERAGE_RESULTS }}"
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
-
+        run: >
+          sonar-scanner 
+          --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" 
+          --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+          --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"

@@ -1,4 +1,4 @@
-= C++ example project scanned on SonarCloud using GitHub Actions
+= C++ example project scanned on SonarCloud with code coverage using GitHub Actions
 // URIs:
 :uri-qg-status: https://sonarcloud.io/dashboard?id=sonarsource-cfamily-examples_windows-msbuild-gh-actions-sc
 :img-qg-status: https://sonarcloud.io/api/project_badges/measure?project=sonarsource-cfamily-examples_windows-msbuild-gh-actions-sc&metric=alert_status
@@ -13,14 +13,15 @@ image:{img-qg-status}[Quality Gate Status,link={uri-qg-status}]
 :note-caption: :information_source:
 NOTE: This simple example ignores https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#analysis-cache[analysis cache] and https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#parallel-code-scan[multithreaded execution] both of which can boost analysis significantly.
 
-It is very easy to analyze a C, C++ and Objective-C project with SonarCloud and https://docs.sonarcloud.io/getting-started/github/[GitHub Actions]:
+It is very easy to analyze a C, C++ and Objective-C project on SonarCloud with code coverage and https://docs.sonarcloud.io/getting-started/github/[GitHub Actions]:
 
 . Create a `sonar-project.properties` file to store your configuration
 . In your `.github/workflows/build.yml` file:
 .. Download the https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-cli/[Sonar Scanner]
 .. Download the https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#analysis-steps-using-build-wrapper[Build Wrapper]
 .. Wrap your compilation with the Build Wrapper
-.. Run `sonar-scanner` as the final step
+.. Build and run your tests using `vstest.console.exe`. Be sure to enable code coverage and to convert the result file into an XML file
+.. Run `sonar-scanner` as the final step with the extra property `sonar.cfamily.vscoveragexml.reportsPath` set with the path that will contain your XML coverage report
 . Make sure that you have your token stored as a secret in your repository (`SONAR_TOKEN`). You can request new tokens using https://sonarcloud.io/account/security/[Account/Security page].
 
 You can take a look at the link:sonar-project.properties[sonar-project.properties] and link:.github/workflows/build.yml[build.yml] to see it in practice.
@@ -32,6 +33,7 @@ You can take a look at the link:sonar-project.properties[sonar-project.propertie
 - https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#analysis-cache[Configuring C, C++ and Objective-C analysis cache]
 - https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#parallel-code-scan[Configuring multithreaded execution]
 - https://docs.sonarcloud.io/advanced-setup/languages/c-c-objective-c/#analysis-steps-using-compilation-database[Using compilation database (compile_commands.json)]
+- https://docs.sonarcloud.io/enriching/test-coverage/test-coverage-parameters/[Test coverage parameters]
 
 = Windows\MSBuild
 
