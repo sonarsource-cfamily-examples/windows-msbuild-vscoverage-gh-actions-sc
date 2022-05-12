@@ -17,7 +17,7 @@ Adding code coverage is done the same way regardless of whether you use the Buil
 To get coverage and feed it to the sonar-scanner, use the following procedure.
 
 . Build and run your tests using `vstest.console.exe`. Be sure to enable code coverage and to convert the result file into an XML file
-. Point the property `sonar.cfamily.vscoveragexml.reportsPath` to the path that will contain your XML coverage report.
+. Point the property `sonar.cfamily.vscoveragexml.reportsPath` to the path that will contain your XML coverage report
 . Run `sonar-scanner` as the final step
 
 You can take a look at the link:sonar-project.properties[sonar-project.properties] and link:.github/workflows/build.yml[build.yml] to see it in practice.
