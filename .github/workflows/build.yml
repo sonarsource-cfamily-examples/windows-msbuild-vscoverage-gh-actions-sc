@@ -18,9 +18,9 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set up msbuild
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v1.1
       - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
-        uses: darenm/Setup-VSTest@v1
+        uses: darenm/Setup-VSTest@v1.2
 
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp-addition@master
