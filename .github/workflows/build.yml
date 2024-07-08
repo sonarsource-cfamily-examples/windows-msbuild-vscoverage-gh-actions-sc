@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set up msbuild
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
       - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
         uses: darenm/Setup-VSTest@v1.2
 
