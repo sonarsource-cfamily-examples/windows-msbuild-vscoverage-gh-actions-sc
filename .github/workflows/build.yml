@@ -22,12 +22,12 @@ jobs:
       - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
         uses: darenm/Setup-VSTest@v1.2
 
-      - name: Install sonar-scanner and build-wrapper
-        uses: sonarsource/sonarcloud-github-c-cpp@v3
+      - name: Install Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v4
 
-      - name: Run build-wrapper
+      - name: Run Build Wrapper
         run: |
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} msbuild sonar_scanner_example.vcxproj /t:rebuild /nodeReuse:false
+          build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} msbuild sonar_scanner_example.vcxproj /t:rebuild /nodeReuse:false
       - name: Build tests
         run: |
           msbuild test1\test1.vcxproj
@@ -38,11 +38,11 @@ jobs:
           /EnableCodeCoverage 
           /Collect:"Code Coverage;Format=Xml" 
           /ResultsDirectory:"${{ env.COVERAGE_RESULTS }}"
-      - name: Run sonar-scanner
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }} # Put the name of your token here
-        run: >
-          sonar-scanner 
-          --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-          --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"
+        with: 
+          args: > 
+            --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+            --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"
