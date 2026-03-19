@@ -13,17 +13,17 @@ jobs:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
       COVERAGE_RESULTS: coverage_results # Directory where coverage results will be placed
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set up msbuild
         uses: microsoft/setup-msbuild@v2
       - name: Setup VSTest.console.exe # Needed to run tests and generate coverage
-        uses: darenm/Setup-VSTest@v1.2
+        uses: darenm/Setup-VSTest@v1.3
 
       - name: Install Build Wrapper
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v4
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v7
 
       - name: Run Build Wrapper
         run: |
@@ -39,10 +39,10 @@ jobs:
           /Collect:"Code Coverage;Format=Xml" 
           /ResultsDirectory:"${{ env.COVERAGE_RESULTS }}"
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }} # Put the name of your token here
         with: 
           args: > 
-            --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-            --define sonar.cfamily.vscoveragexml.reportsPath="${{ env.COVERAGE_RESULTS }}/*/*.xml"
+            --define sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
+            --define sonar.cfamily.vscoveragexml.reportsPath=${{ env.COVERAGE_RESULTS }}/*/*.xml
